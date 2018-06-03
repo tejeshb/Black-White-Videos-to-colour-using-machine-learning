@@ -1,0 +1,68 @@
+---
+title: "Clustering with Iris Data"
+author: "Tejesh Batapati"
+date: "6/1/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Pilot (Getting Started) 
+Assuming that R Studio or R is up and running in your system.
+We are going to use Iris data set to build your first model for good reasons. Iris data set is cleaned dataset which comes with R itself there by no hassel of extracting and uploading it in to R. 
+![Iris flowers](/Users/tejeshbatapati/Downloads/irises.png)
+Iris Data set contains the features such as Length and Width of Sepals and Petals of Iris flowers(Versocolor, Virginica, Setosa). Lets check how it is represented in dataset. 
+
+```{r iris}
+head(iris)
+```
+```{r}
+summary(iris)
+```
+You can observe that the dataset is balanced as it has equal number of rows each 50.
+```{r}
+table(iris$Species)
+```
+## Why to build model
+
+We humans can recognize the type of Iris flower is by looking at it. But this is not the case with box machines (I mean computers) it cannot understand things like we do.But it can recognize the patterns in data to classify the flower. 
+<center>
+![Iris flowers](/Users/tejeshbatapati/Downloads/iris_petal_sepal.png) 
+</center>
+## Which model to built
+
+Okay now we got data what we need.But the big question is which model to build. The simple answer to it is that "It Depends". Each model in Machine Learning is based on a Algorithm. To pick a suitable model it is best to have an Idea on how that model works (atleast in High level to get you started with) 
+
+For this data what we need to do is to group each type of the flower. Knowing this we choose a model that can perform this task for us that is K- means (well not the only one). Euclidian Distance is the main event that happens in this model.  
+
+** Set.seed is used as a address so that same randomness is repeated , helps in repeating and replicating the solution**
+```{r}
+set.seed(007)
+myIris <- iris[, c(1:4)] #removing the dependent
+myIris <- sapply(myIris, FUN=function(x) { scale(x, scale = T, center=T)})
+res.1 <- kmeans(myIris, 3)
+```
+That's it its done. Lets see how it performed.
+```{r}
+df <- data.frame(cluster = res.1$cluster, species = iris$Species) 
+table (factor(df$cluster), df$species)
+```
+```{r}
+plot(iris[,c(1:3)], col=res.1$cluster)
+```
+Setosa flowers are prefectly classified but it struggled in identifying other two kinds. Lets try to improve the accuracy by changing some parameters of scaling and centering.
+Setosa is in green color in the above plot
+```{r}
+set.seed(007)
+myIris <- iris[, c(1:4)] #removing the dependent
+myIris <- sapply(myIris, FUN=function(x) { scale(x, scale = T, center=F)})
+res.2 <- kmeans(myIris, 3)
+df <- data.frame(cluster = res.2$cluster, species = iris$Species) 
+table (factor(df$cluster), df$species)
+```
+Clearly by not centering the data it is giving better results.(To know more about centering and its effects see <https://www.kdnuggets.com/2016/08/central-limit-theorem-data-science.html>) Lets visualize the same.  
+```{r}
+plot(iris[,c(1:3)], col=res.2$cluster)
+```
