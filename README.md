@@ -32,7 +32,7 @@ I have fed short videos of old black and white from youtube and Imgur to run the
 
 #### Ayn_Rand_Interview (Author of Fountain Head and Atlas Shrugged)
 
-![](Ayn_Rand.gif)
+![](Ayn_rand.gif)
 
 
 
